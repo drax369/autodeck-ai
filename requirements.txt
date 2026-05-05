@@ -1,0 +1,6 @@
+gradio
+scikit-learn
+python-pptx
+pandas
+numpy
+python-dotenv
