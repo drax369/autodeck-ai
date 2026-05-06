@@ -57,28 +57,25 @@ def get_category(ext):
 
 # Load data
 df = pd.read_csv(TRAIN_CSV)
-test_df = df[df['split'] == 'test'].copy()
+test_df = df.copy()
 print(f"Predicting {len(test_df)} test files...")
 
 results = []
 
 for i, (idx, row) in enumerate(test_df.iterrows()):
-    filepath = os.path.join(DATA_DIR, "test", row['filename'])
+    file_path = os.path.join(DATA_DIR, row['split'], row['filename'])
+
+    slide_count, word_count, exact = extract_features(file_path, row['file_extension'])
+    avg_words = word_count / max(slide_count, 1)
     size_kb = row['file_size_bytes'] / 1024
     size_mb = row['file_size_mb']
 
-    slide_count, word_count, exact = extract_features(filepath, row['file_extension'])
-    avg_words = word_count / max(slide_count, 1)
-
-    # Build feature vector
     X = [[size_kb, size_mb, slide_count, word_count, avg_words]]
 
-    # Predict with ML model
     complexity = le_complexity.inverse_transform(clf_complexity.predict(X))[0]
     density = le_density.inverse_transform(clf_density.predict(X))[0]
     category = get_category(row['file_extension'])
 
-    # Get prediction confidence from model probabilities
     complexity_proba = clf_complexity.predict_proba(X).max()
     density_proba = clf_density.predict_proba(X).max()
     confidence = round((complexity_proba + density_proba) / 2, 2)
@@ -93,7 +90,7 @@ for i, (idx, row) in enumerate(test_df.iterrows()):
         'confidence': confidence
     })
 
-    if (i + 1) % 10 == 0:
+    if (i + 1) % 100 == 0:
         print(f"  {i+1}/{len(test_df)} done...")
 
 output_df = pd.DataFrame(results)
