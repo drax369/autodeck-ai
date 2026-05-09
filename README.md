@@ -236,7 +236,7 @@ fpdf2
 | Track | GenAI — AutoDeck AI |
 | Score | 0.56866 (public leaderboard) |
 | Demo | [Hugging Face Spaces](https://huggingface.co/spaces/Drax369/autodeck-ai) |
-| Notebook | [Kaggle](https://www.kaggle.com/code/dhanush3691/notebook984cb4990c) |
+| Notebook | [Kaggle](https://www.kaggle.com/code/dhanush3691/autodeck-ai-presentation-intelligence-system) |
 
 ---
 
